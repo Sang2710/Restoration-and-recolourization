@@ -1,5 +1,4 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 from __future__ import print_function
 import torch
@@ -9,8 +8,6 @@ import numpy as np
 import os
 import torch.nn as nn
 
-# Converts a Tensor into a Numpy array
-# |imtype|: the desired type of the converted numpy array
 def tensor2im(image_tensor, imtype=np.uint8, normalize=True):
     if isinstance(image_tensor, list):
         image_numpy = []
@@ -27,8 +24,6 @@ def tensor2im(image_tensor, imtype=np.uint8, normalize=True):
         image_numpy = image_numpy[:, :, 0]
     return image_numpy.astype(imtype)
 
-
-# Converts a one-hot tensor into a colorful label map
 def tensor2label(label_tensor, n_label, imtype=np.uint8):
     if n_label == 0:
         return tensor2im(label_tensor, imtype)
