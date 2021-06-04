@@ -11,7 +11,7 @@ try:
 except ImportError:
     from io import BytesIO  
 import torchvision.utils as vutils
-from tensorboardX import SummaryWriter
+#from tensorboardX import SummaryWriter
 import torch
 import numpy as np
 
@@ -21,7 +21,7 @@ class Visualizer:
         self.opt = opt
         self.tf_log = opt.isTrain and opt.tf_log
 
-        self.tensorboard_log = opt.tensorboard_log
+       # self.tensorboard_log = opt.tensorboard_log
 
         self.win_size = opt.display_winsize
         self.name = opt.name
@@ -48,13 +48,13 @@ class Visualizer:
     def display_current_results(self, visuals, epoch, step):
 
         all_tensor = []
-        if self.tensorboard_log:
+        """if self.tensorboard_log:
 
             for key, tensor in visuals.items():
                 all_tensor.append((tensor.data.cpu() + 1) / 2)
 
             output = torch.cat(all_tensor, 0)
-            img_grid = vutils.make_grid(output, nrow=self.opt.batchSize, padding=0, normalize=False)
+            img_grid = vutils.make_grid(output, nrow=self.opt.batchSize, padding=0, normalize=False)"""
 
             if self.opt.isTrain:
                 self.writer.add_image("Face_SPADE/training_samples", img_grid, step)
@@ -75,7 +75,7 @@ class Visualizer:
                 summary = self.tf.Summary(value=[self.tf.Summary.Value(tag=tag, simple_value=value)])
                 self.writer.add_summary(summary, step)
 
-        if self.tensorboard_log:
+        """if self.tensorboard_log:
 
             self.writer.add_scalar("Loss/GAN_Feat", errors["GAN_Feat"].mean().float(), step)
             self.writer.add_scalar("Loss/VGG", errors["VGG"].mean().float(), step)
@@ -86,7 +86,7 @@ class Visualizer:
                     "D": (errors["D_Fake"].mean().float() + errors["D_real"].mean().float()) / 2,
                 },
                 step,
-            )
+            )"""
 
     
     def print_current_errors(self, epoch, i, errors, t):
