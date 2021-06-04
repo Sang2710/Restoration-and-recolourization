@@ -30,10 +30,10 @@ img_bw = postprocess_tens(tens_l_orig, torch.cat((0*tens_l_orig,0*tens_l_orig),d
 out_img_eccv16 = postprocess_tens(tens_l_orig, colorizer_eccv16(tens_l_rs).cpu())
 out_img_siggraph17 = postprocess_tens(tens_l_orig, colorizer_siggraph17(tens_l_rs).cpu())
 
-plt.imsave('%s_eccv16.png'%opt.save_prefix, out_img_eccv16)
-plt.imsave('%s_siggraph17.png'%opt.save_prefix, out_img_siggraph17)
+#plt.imsave('%s_eccv16.png'%opt.save_prefix, out_img_eccv16)
+plt.imsave('%s_colored.png'%opt.save_prefix, out_img_siggraph17)
 
-plt.figure(figsize=(12,8))
+"""plt.figure(figsize=(12,8))
 plt.subplot(2,2,1)
 plt.imshow(img)
 plt.title('Original')
@@ -53,4 +53,4 @@ plt.subplot(2,2,4)
 plt.imshow(out_img_siggraph17)
 plt.title('Output (SIGGRAPH 17)')
 plt.axis('off')
-plt.show()
+plt.show()"""
