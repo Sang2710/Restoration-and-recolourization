@@ -1,5 +1,4 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 from data.base_dataset import BaseDataset, get_params, get_transform
 from PIL import Image
@@ -58,15 +57,15 @@ class Pix2pixDataset(BaseDataset):
         return filename1_without_ext == filename2_without_ext
 
     def __getitem__(self, index):
-        # Label Image
+        
         label_path = self.label_paths[index]
         label = Image.open(label_path)
         params = get_params(self.opt, label.size)
         transform_label = get_transform(self.opt, params, method=Image.NEAREST, normalize=False)
         label_tensor = transform_label(label) * 255.0
-        label_tensor[label_tensor == 255] = self.opt.label_nc  # 'unknown' is opt.label_nc
+        label_tensor[label_tensor == 255] = self.opt.label_nc 
 
-        # input image (real images)
+        
         image_path = self.image_paths[index]
         assert self.paths_match(
             label_path, image_path
@@ -77,7 +76,7 @@ class Pix2pixDataset(BaseDataset):
         transform_image = get_transform(self.opt, params)
         image_tensor = transform_image(image)
 
-        # if using instance maps
+        
         if self.opt.no_instance:
             instance_tensor = 0
         else:
@@ -96,7 +95,7 @@ class Pix2pixDataset(BaseDataset):
             "path": image_path,
         }
 
-        # Give subclasses a chance to modify the final output
+       
         self.postprocess(input_dict)
 
         return input_dict
