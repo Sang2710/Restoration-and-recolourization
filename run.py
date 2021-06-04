@@ -41,7 +41,7 @@ if __name__ == "__main__":
     main_environment = os.getcwd()
 
     
-    print("Running Stage 1: Overall restoration")
+    print("Running Overall Restoration")
     os.chdir("./Global")
     stage_1_input_dir = opts.input_folder
     stage_1_output_dir = os.path.join(opts.output_folder, "stage_1_restore_output")
@@ -86,7 +86,7 @@ if __name__ == "__main__":
         run_cmd(stage_1_command_1)
         run_cmd(stage_1_command_2)
 
-    ## Solve the case when there is no face in the old photo
+   
     stage_1_results = os.path.join(stage_1_output_dir, "restored_image")
     stage_4_output_dir = os.path.join(opts.output_folder, "final_output")
     if not os.path.exists(stage_4_output_dir):
@@ -95,12 +95,12 @@ if __name__ == "__main__":
         img_dir = os.path.join(stage_1_results, x)
         shutil.copy(img_dir, stage_4_output_dir)
 
-    print("Finish Stage 1 ...")
-    print("\n")
     
-    ## Stage 2: Face Detection
+    
+    
+    
 
-    print("Running Stage 2: Face Detection")
+    print("Running Face Detection")
     os.chdir(".././Face_Detection")
     stage_2_input_dir = os.path.join(stage_1_output_dir, "restored_image")
     stage_2_output_dir = os.path.join(opts.output_folder, "stage_2_detection_output")
@@ -110,11 +110,10 @@ if __name__ == "__main__":
         "python detect_all_dlib.py --url " + stage_2_input_dir + " --save_url " + stage_2_output_dir
     )
     run_cmd(stage_2_command)
-    print("Finish Stage 2 ...")
-    print("\n")
+    
 
-    ## Stage 3: Face Restore
-    print("Running Stage 3: Face Enhancement")
+   
+    print("Running Face Enhancement")
     os.chdir(".././Face_Enhancement")
     stage_3_input_mask = "./"
     stage_3_input_face = stage_2_output_dir
@@ -135,11 +134,11 @@ if __name__ == "__main__":
         + " --no_parsing_map"
     )
     run_cmd(stage_3_command)
-    print("Finish Stage 3 ...")
-    print("\n")
+   
+    
 
-    ## Stage 4: Warp back
-    print("Running Stage 4: Blending")
+  
+    print("Overall Restoration")
     os.chdir(".././Face_Detection")
     stage_4_input_image_dir = os.path.join(stage_1_output_dir, "restored_image")
     stage_4_input_face_dir = os.path.join(stage_3_output_dir, "each_img")
@@ -155,12 +154,12 @@ if __name__ == "__main__":
         + stage_4_output_dir
     )
     run_cmd(stage_4_command)
-    print("Finish Stage 4 ...")
-    print("\n")
+    
+    
     import os
 
     exec(open('/content/photo_restoration/demo_release.py').read())
 
-    print("All the processing is done. Please check the results.")
+    print("  Finished")
 
 
