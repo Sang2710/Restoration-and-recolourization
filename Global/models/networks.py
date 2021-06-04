@@ -1,5 +1,3 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
 
 import torch
 import torch.nn as nn
@@ -8,12 +6,10 @@ from torch.autograd import Variable
 import numpy as np
 from torch.nn.utils import spectral_norm
 
-# from util.util import SwitchNorm2d
+
 import torch.nn.functional as F
 
-###############################################################################
-# Functions
-###############################################################################
+
 def weights_init(m):
     classname = m.__class__.__name__
     if classname.find("Conv") != -1:
