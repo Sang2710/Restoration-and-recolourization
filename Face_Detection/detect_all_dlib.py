@@ -1,12 +1,10 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 import torch
 import numpy as np
 import skimage.io as io
 
-# from FaceSDK.face_sdk import FaceDetection
-# from face_sdk import FaceDetection
+
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 from skimage.transform import SimilarityTransform
@@ -82,14 +80,14 @@ def compute_transformation_matrix(img, landmark, normalize, target_face_scale=1.
     std_pts = _standard_face_pts()  # [-1,1]
     target_pts = (std_pts * target_face_scale + 1) / 2 * 256.0
 
-    # print(target_pts)
+    
 
     h, w, c = img.shape
     if normalize == True:
         landmark[:, 0] = landmark[:, 0] / h * 2 - 1.0
         landmark[:, 1] = landmark[:, 1] / w * 2 - 1.0
 
-    # print(landmark)
+    
 
     affine = SimilarityTransform()
 
@@ -115,7 +113,7 @@ def show_detection(image, box, landmark):
 
 
 def affine2theta(affine, input_w, input_h, target_w, target_h):
-    # param = np.linalg.inv(affine)
+    
     param = affine
     theta = np.zeros([2, 3])
     theta[0, 0] = param[0, 0] * input_h / target_h
@@ -139,7 +137,7 @@ if __name__ == "__main__":
     url = opts.url
     save_url = opts.save_url
 
-    ### If the origin url is None, then we don't need to reid the origin image
+    
 
     os.makedirs(url, exist_ok=True)
     os.makedirs(save_url, exist_ok=True)
