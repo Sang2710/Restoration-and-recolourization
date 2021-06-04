@@ -1,5 +1,4 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 import re
 import importlib
@@ -30,8 +29,7 @@ def copyconf(default_opt, **kwargs):
     return conf
 
 
-# Converts a Tensor into a Numpy array
-# |imtype|: the desired type of the converted numpy array
+
 def tensor2im(image_tensor, imtype=np.uint8, normalize=True, tile=False):
     if isinstance(image_tensor, list):
         image_numpy = []
@@ -40,7 +38,7 @@ def tensor2im(image_tensor, imtype=np.uint8, normalize=True, tile=False):
         return image_numpy
 
     if image_tensor.dim() == 4:
-        # transform each image in the batch
+        
         images_np = []
         for b in range(image_tensor.size(0)):
             one_image = image_tensor[b]
@@ -63,7 +61,7 @@ def tensor2im(image_tensor, imtype=np.uint8, normalize=True, tile=False):
     return image_numpy.astype(imtype)
 
 
-# Converts a one-hot tensor into a colorful label map
+
 def tensor2label(label_tensor, n_label, imtype=np.uint8, tile=False):
     if label_tensor.dim() == 4:
         # transform each image in the batch
@@ -73,12 +71,7 @@ def tensor2label(label_tensor, n_label, imtype=np.uint8, tile=False):
             one_image_np = tensor2label(one_image, n_label, imtype)
             images_np.append(one_image_np.reshape(1, *one_image_np.shape))
         images_np = np.concatenate(images_np, axis=0)
-        # if tile:
-        #     images_tiled = tile_images(images_np)
-        #     return images_tiled
-        # else:
-        #     images_np = images_np[0]
-        #     return images_np
+        
         return images_np
 
     if label_tensor.dim() == 1:
@@ -103,7 +96,7 @@ def save_image(image_numpy, image_path, create_dir=False):
         image_numpy = np.repeat(image_numpy, 3, 2)
     image_pil = Image.fromarray(image_numpy)
 
-    # save to png
+    
     image_pil.save(image_path.replace(".jpg", ".png"))
 
 
@@ -125,11 +118,7 @@ def atoi(text):
 
 
 def natural_keys(text):
-    """
-    alist.sort(key=natural_keys) sorts in human order
-    http://nedbatchelder.com/blog/200712/human_sorting.html
-    (See Toothy's implementation in the comments)
-    """
+    
     return [atoi(c) for c in re.split("(\d+)", text)]
 
 
@@ -182,11 +171,7 @@ def load_network(net, label, epoch, opt):
     return net
 
 
-###############################################################################
-# Code from
-# https://github.com/ycszen/pytorch-seg/blob/master/transform.py
-# Modified so it complies with the Citscape label map colors
-###############################################################################
+
 def uint82bin(n, count=8):
     """returns the binary of integer n, count refers to amount of bits"""
     return "".join([str((n >> y) & 1) for y in range(count - 1, -1, -1)])
