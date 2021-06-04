@@ -1,5 +1,4 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 import os
 import argparse
@@ -33,7 +32,7 @@ if __name__ == "__main__":
 
     gpu1 = opts.GPU
 
-    # resolve relative paths before changing directory
+    
     opts.input_folder = os.path.abspath(opts.input_folder)
     opts.output_folder = os.path.abspath(opts.output_folder)
     if not os.path.exists(opts.output_folder):
@@ -41,7 +40,7 @@ if __name__ == "__main__":
 
     main_environment = os.getcwd()
 
-    ## Stage 1: Overall Quality Improve
+    
     print("Running Stage 1: Overall restoration")
     os.chdir("./Global")
     stage_1_input_dir = opts.input_folder
