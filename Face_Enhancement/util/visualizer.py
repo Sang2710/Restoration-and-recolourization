@@ -48,14 +48,6 @@ class Visualizer:
     def display_current_results(self, visuals, epoch, step):
 
         all_tensor = []
-        """if self.tensorboard_log:
-        
-
-            for key, tensor in visuals.items():
-                all_tensor.append((tensor.data.cpu() + 1) / 2)
-
-            output = torch.cat(all_tensor, 0)
-            img_grid = vutils.make_grid(output, nrow=self.opt.batchSize, padding=0, normalize=False)"""
         if self.opt.isTrain:
             self.writer.add_image("Face_SPADE/training_samples", img_grid, step)
         else:
