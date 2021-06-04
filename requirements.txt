@@ -10,3 +10,8 @@ tensorboardX
 scipy
 opencv-python
 einops
+skimage
+numpy
+matplotlib
+argparse
+PIL
