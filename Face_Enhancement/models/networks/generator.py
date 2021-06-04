@@ -1,5 +1,4 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 import torch
 import torch.nn as nn
@@ -34,11 +33,10 @@ class SPADEGenerator(BaseNetwork):
         print("The size of the latent vector size is [%d,%d]" % (self.sw, self.sh))
 
         if opt.use_vae:
-            # In case of VAE, we will sample from random z vector
+            
             self.fc = nn.Linear(opt.z_dim, 16 * nf * self.sw * self.sh)
         else:
-            # Otherwise, we make the network deterministic by starting with
-            # downsampled segmentation map instead of random z
+            
             if self.opt.no_parsing_map:
                 self.fc = nn.Conv2d(3, 16 * nf, 3, padding=1)
             else:
@@ -112,7 +110,7 @@ class SPADEGenerator(BaseNetwork):
             x = self.fc(z)
             x = x.view(-1, 16 * self.opt.ngf, self.sh, self.sw)
         else:
-            # we downsample segmap and run convolution
+            
             if self.opt.no_parsing_map:
                 x = F.interpolate(degraded_image, size=(self.sh, self.sw), mode="bilinear")
             else:
@@ -173,21 +171,19 @@ class Pix2PixHDGenerator(BaseNetwork):
         super().__init__()
         input_nc = 3
 
-        # print("xxxxx")
-        # print(opt.norm_G)
         norm_layer = get_nonspade_norm_layer(opt, opt.norm_G)
         activation = nn.ReLU(False)
 
         model = []
 
-        # initial conv
+       
         model += [
             nn.ReflectionPad2d(opt.resnet_initial_kernel_size // 2),
             norm_layer(nn.Conv2d(input_nc, opt.ngf, kernel_size=opt.resnet_initial_kernel_size, padding=0)),
             activation,
         ]
 
-        # downsample
+        
         mult = 1
         for i in range(opt.resnet_n_downsample):
             model += [
@@ -196,7 +192,7 @@ class Pix2PixHDGenerator(BaseNetwork):
             ]
             mult *= 2
 
-        # resnet blocks
+        
         for i in range(opt.resnet_n_blocks):
             model += [
                 ResnetBlock(
@@ -207,7 +203,7 @@ class Pix2PixHDGenerator(BaseNetwork):
                 )
             ]
 
-        # upsample
+        
         for i in range(opt.resnet_n_downsample):
             nc_in = int(opt.ngf * mult)
             nc_out = int((opt.ngf * mult) / 2)
