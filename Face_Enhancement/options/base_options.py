@@ -1,5 +1,4 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 import sys
 import argparse
@@ -16,7 +15,7 @@ class BaseOptions:
         self.initialized = False
 
     def initialize(self, parser):
-        # experiment specifics
+        
         parser.add_argument(
             "--name",
             type=str,
@@ -51,7 +50,7 @@ class BaseOptions:
         )
         parser.add_argument("--phase", type=str, default="train", help="train, val, test, etc")
 
-        # input/output sizes
+        
         parser.add_argument("--batchSize", type=int, default=1, help="input batch size")
         parser.add_argument(
             "--preprocess_mode",
@@ -101,7 +100,7 @@ class BaseOptions:
         )
         parser.add_argument("--output_nc", type=int, default=3, help="# of output image channels")
 
-        # for setting inputs
+        
         parser.add_argument("--dataroot", type=str, default="./datasets/cityscapes/")
         parser.add_argument("--dataset_mode", type=str, default="coco")
         parser.add_argument(
@@ -135,10 +134,10 @@ class BaseOptions:
             "--cache_filelist_read", action="store_true", help="reads from the file list cache"
         )
 
-        # for displays
+        
         parser.add_argument("--display_winsize", type=int, default=400, help="display window size")
 
-        # for generator
+        
         parser.add_argument(
             "--netG", type=str, default="spade", help="selects model to use for netG (pix2pixhd | spade)"
         )
@@ -157,7 +156,7 @@ class BaseOptions:
             "--no_parsing_map", action="store_true", help="During training, we do not use the parsing map"
         )
 
-        # for instance-wise features
+        
         parser.add_argument(
             "--no_instance", action="store_true", help="if specified, do *not* add instance map as input"
         )
@@ -169,7 +168,7 @@ class BaseOptions:
             "--tensorboard_log", action="store_true", help="use tensorboard to record the resutls"
         )
 
-        # parser.add_argument('--img_dir',)
+        
         parser.add_argument(
             "--old_face_folder", type=str, default="", help="The folder name of input old face"
         )
@@ -183,28 +182,24 @@ class BaseOptions:
         return parser
 
     def gather_options(self):
-        # initialize parser with basic options
+        
         if not self.initialized:
             parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
             parser = self.initialize(parser)
 
-        # get the basic options
+        
         opt, unknown = parser.parse_known_args()
 
-        # modify model-related parser options
+        
         model_name = opt.model
         model_option_setter = models.get_option_setter(model_name)
         parser = model_option_setter(parser, self.isTrain)
 
-        # modify dataset-related parser options
-        # dataset_mode = opt.dataset_mode
-        # dataset_option_setter = data.get_option_setter(dataset_mode)
-        # parser = dataset_option_setter(parser, self.isTrain)
+       
 
         opt, unknown = parser.parse_known_args()
 
-        # if there is opt_file, load it.
-        # The previous default options will be overwritten
+        
         if opt.load_from_opt_file:
             parser = self.update_options_from_file(parser, opt)
 
@@ -222,7 +217,7 @@ class BaseOptions:
                 comment = "\t[default: %s]" % str(default)
             message += "{:>25}: {:<30}{}\n".format(str(k), str(v), comment)
         message += "----------------- End -------------------"
-        # print(message)
+        
 
     def option_file_path(self, opt, makedir=False):
         expr_dir = os.path.join(opt.checkpoints_dir, opt.name)
@@ -260,20 +255,19 @@ class BaseOptions:
     def parse(self, save=False):
 
         opt = self.gather_options()
-        opt.isTrain = self.isTrain  # train or test
+        opt.isTrain = self.isTrain  
         opt.contain_dontcare_label = False
 
         self.print_options(opt)
         if opt.isTrain:
             self.save_options(opt)
 
-        # Set semantic_nc based on the option.
-        # This will be convenient in many places
+        
         opt.semantic_nc = (
             opt.label_nc + (1 if opt.contain_dontcare_label else 0) + (0 if opt.no_instance else 1)
         )
 
-        # set gpu ids
+        
         str_ids = opt.gpu_ids.split(",")
         opt.gpu_ids = []
         for str_id in str_ids:
