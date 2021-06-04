@@ -1,5 +1,4 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 import torch.utils.data as data
 from PIL import Image
@@ -103,7 +102,7 @@ def __scale_width(img, target_width, method=Image.BICUBIC):
 
 def __scale_shortside(img, target_width, method=Image.BICUBIC):
     ow, oh = img.size
-    ss, ls = min(ow, oh), max(ow, oh)  # shortside and longside
+    ss, ls = min(ow, oh), max(ow, oh)  
     width_is_shorter = ow == ss
     if ss == target_width:
         return img
