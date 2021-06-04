@@ -25,7 +25,7 @@ class Visualizer:
 
         self.win_size = opt.display_winsize
         self.name = opt.name
-        if self.tensorboard_log:
+        """if self.tensorboard_log:
 
             if self.opt.isTrain:
                 self.log_dir = os.path.join(opt.checkpoints_dir, opt.name, "logs")
@@ -36,7 +36,7 @@ class Visualizer:
                 print("hi :)")
                 self.log_dir = os.path.join(opt.checkpoints_dir, opt.name, opt.results_dir)
                 if not os.path.exists(self.log_dir):
-                    os.makedirs(self.log_dir)
+                    os.makedirs(self.log_dir)"""
 
         if opt.isTrain:
             self.log_name = os.path.join(opt.checkpoints_dir, opt.name, "loss_log.txt")
