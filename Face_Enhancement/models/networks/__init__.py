@@ -1,5 +1,4 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 import torch
 from models.networks.base_network import BaseNetwork
@@ -53,6 +52,6 @@ def define_D(opt):
 
 
 def define_E(opt):
-    # there exists only one encoder type
+   
     netE_cls = find_network_using_name("conv", "encoder")
     return create_network(netE_cls, opt)
