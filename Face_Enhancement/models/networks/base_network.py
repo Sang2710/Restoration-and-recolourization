@@ -1,5 +1,4 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 import torch.nn as nn
 from torch.nn import init
@@ -52,7 +51,7 @@ class BaseNetwork(nn.Module):
 
         self.apply(init_func)
 
-        # propagate to children
+        
         for m in self.children():
             if hasattr(m, "init_weights"):
                 m.init_weights(init_type, gain)
