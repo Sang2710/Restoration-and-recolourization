@@ -1,11 +1,10 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 import torch
 import numpy as np
 import skimage.io as io
 
-# from face_sdk import FaceDetection
+
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 from skimage.transform import SimilarityTransform
@@ -24,29 +23,16 @@ import dlib
 
 
 def calculate_cdf(histogram):
-    """
-    This method calculates the cumulative distribution function
-    :param array histogram: The values of the histogram
-    :return: normalized_cdf: The normalized cumulative distribution function
-    :rtype: array
-    """
-    # Get the cumulative sum of the elements
+
     cdf = histogram.cumsum()
 
-    # Normalize the cdf
     normalized_cdf = cdf / float(cdf.max())
 
     return normalized_cdf
 
 
 def calculate_lookup(src_cdf, ref_cdf):
-    """
-    This method creates the lookup table
-    :param array src_cdf: The cdf for the source image
-    :param array ref_cdf: The cdf for the reference image
-    :return: lookup_table: The lookup table
-    :rtype: array
-    """
+    
     lookup_table = np.zeros(256)
     lookup_val = 0
     for src_pixel_val in range(len(src_cdf)):
@@ -60,22 +46,11 @@ def calculate_lookup(src_cdf, ref_cdf):
 
 
 def match_histograms(src_image, ref_image):
-    """
-    This method matches the source image histogram to the
-    reference signal
-    :param image src_image: The original source image
-    :param image  ref_image: The reference image
-    :return: image_after_matching
-    :rtype: image (array)
-    """
-    # Split the images into the different color channels
-    # b means blue, g means green and r means red
+    
     src_b, src_g, src_r = cv2.split(src_image)
     ref_b, ref_g, ref_r = cv2.split(ref_image)
 
-    # Compute the b, g, and r histograms separately
-    # The flatten() Numpy method returns a copy of the array c
-    # collapsed into one dimension.
+    
     src_hist_blue, bin_0 = np.histogram(src_b.flatten(), 256, [0, 256])
     src_hist_green, bin_1 = np.histogram(src_g.flatten(), 256, [0, 256])
     src_hist_red, bin_2 = np.histogram(src_r.flatten(), 256, [0, 256])
@@ -83,7 +58,6 @@ def match_histograms(src_image, ref_image):
     ref_hist_green, bin_4 = np.histogram(ref_g.flatten(), 256, [0, 256])
     ref_hist_red, bin_5 = np.histogram(ref_r.flatten(), 256, [0, 256])
 
-    # Compute the normalized cdf for the source and reference image
     src_cdf_blue = calculate_cdf(src_hist_blue)
     src_cdf_green = calculate_cdf(src_hist_green)
     src_cdf_red = calculate_cdf(src_hist_red)
@@ -91,18 +65,17 @@ def match_histograms(src_image, ref_image):
     ref_cdf_green = calculate_cdf(ref_hist_green)
     ref_cdf_red = calculate_cdf(ref_hist_red)
 
-    # Make a separate lookup table for each color
+    
     blue_lookup_table = calculate_lookup(src_cdf_blue, ref_cdf_blue)
     green_lookup_table = calculate_lookup(src_cdf_green, ref_cdf_green)
     red_lookup_table = calculate_lookup(src_cdf_red, ref_cdf_red)
 
-    # Use the lookup function to transform the colors of the original
-    # source image
+    
     blue_after_transform = cv2.LUT(src_b, blue_lookup_table)
     green_after_transform = cv2.LUT(src_g, green_lookup_table)
     red_after_transform = cv2.LUT(src_r, red_lookup_table)
 
-    # Put the image back together
+    
     image_after_matching = cv2.merge([blue_after_transform, green_after_transform, red_after_transform])
     image_after_matching = cv2.convertScaleAbs(image_after_matching)
 
@@ -129,14 +102,14 @@ def compute_transformation_matrix(img, landmark, normalize, target_face_scale=1.
     std_pts = _standard_face_pts()  # [-1,1]
     target_pts = (std_pts * target_face_scale + 1) / 2 * 256.0
 
-    # print(target_pts)
+    
 
     h, w, c = img.shape
     if normalize == True:
         landmark[:, 0] = landmark[:, 0] / h * 2 - 1.0
         landmark[:, 1] = landmark[:, 1] / w * 2 - 1.0
 
-    # print(landmark)
+    
 
     affine = SimilarityTransform()
 
@@ -150,14 +123,13 @@ def compute_inverse_transformation_matrix(img, landmark, normalize, target_face_
     std_pts = _standard_face_pts()  # [-1,1]
     target_pts = (std_pts * target_face_scale + 1) / 2 * 256.0
 
-    # print(target_pts)
-
+    
     h, w, c = img.shape
     if normalize == True:
         landmark[:, 0] = landmark[:, 0] / h * 2 - 1.0
         landmark[:, 1] = landmark[:, 1] / w * 2 - 1.0
 
-    # print(landmark)
+    
 
     affine = SimilarityTransform()
 
@@ -232,13 +204,10 @@ def blur_blending_cv2(im1, im2, mask):
     return im
 
 
-# def Poisson_blending(im1,im2,mask):
 
-
-#     Image.composite(
 def Poisson_blending(im1, im2, mask):
 
-    # mask=1-mask
+    
     mask *= 255
     kernel = np.ones((10, 10), np.uint8)
     mask = cv2.erode(mask, kernel, iterations=1)
@@ -285,7 +254,7 @@ def seamless_clone(old_face, new_face, raw_mask):
     prior = np.rint(np.pad(old_face * 255.0, ((height, height), (width, width), (0, 0)), "constant")).astype(
         "uint8"
     )
-    # if np.sum(insertion_mask) == 0:
+    
     n_mask = insertion_mask[1:-1, 1:-1, :]
     n_mask = cv2.copyMakeBorder(n_mask, 1, 1, 1, 1, cv2.BORDER_CONSTANT, 0)
     print(n_mask.shape)
@@ -294,12 +263,12 @@ def seamless_clone(old_face, new_face, raw_mask):
         blended = prior
     else:
         blended = cv2.seamlessClone(
-            insertion,  # pylint: disable=no-member
+            insertion,  
             prior,
             insertion_mask,
             (x_center, y_center),
             cv2.NORMAL_CLONE,
-        )  # pylint: disable=no-member
+        )  
 
     blended = blended[height:-height, width:-width]
 
@@ -403,7 +372,7 @@ if __name__ == "__main__":
                 restored_face = np.array(restored_face)
                 cur_face = restored_face
 
-            ## Histogram Color matching
+            
             A = cv2.cvtColor(aligned_face.astype("uint8"), cv2.COLOR_RGB2BGR)
             B = cv2.cvtColor(cur_face.astype("uint8"), cv2.COLOR_RGB2BGR)
             B = match_histograms(B, A)
@@ -423,7 +392,7 @@ if __name__ == "__main__":
                 output_shape=(origin_height, origin_width, 3),
                 order=0,
                 preserve_range=True,
-            )  ## Nearest neighbour
+            )  
 
             blended = blur_blending_cv2(warped_back, blended, backward_mask)
             blended *= 255.0
