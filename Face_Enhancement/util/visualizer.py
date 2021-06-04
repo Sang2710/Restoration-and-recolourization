@@ -1,5 +1,4 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 import os
 import ntpath
@@ -8,9 +7,9 @@ from . import util
 import scipy.misc
 
 try:
-    from StringIO import StringIO  # Python 2.7
+    from StringIO import StringIO  
 except ImportError:
-    from io import BytesIO  # Python 3.x
+    from io import BytesIO  
 import torchvision.utils as vutils
 from tensorboardX import SummaryWriter
 import torch
@@ -68,7 +67,7 @@ class Visualizer:
                     normalize=False,
                 )
 
-    # errors: dictionary of error labels and values
+    
     def plot_current_errors(self, errors, step):
         if self.tf_log:
             for tag, value in errors.items():
@@ -89,7 +88,7 @@ class Visualizer:
                 step,
             )
 
-    # errors: same format as |errors| of plotCurrentErrors
+    
     def print_current_errors(self, epoch, i, errors, t):
         message = "(epoch: %d, iters: %d, time: %.3f) " % (epoch, i, t)
         for k, v in errors.items():
@@ -104,13 +103,13 @@ class Visualizer:
         for key, t in visuals.items():
             tile = self.opt.batchSize > 8
             if "input_label" == key:
-                t = util.tensor2label(t, self.opt.label_nc + 2, tile=tile)  ## B*H*W*C 0-255 numpy
+                t = util.tensor2label(t, self.opt.label_nc + 2, tile=tile)  
             else:
                 t = util.tensor2im(t, tile=tile)
             visuals[key] = t
         return visuals
 
-    # save image to the disk
+    
     def save_images(self, webpage, visuals, image_path):
         visuals = self.convert_visuals_to_numpy(visuals)
 
