@@ -1,5 +1,4 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 import torch
 import torch.nn as nn
@@ -9,43 +8,35 @@ import torch.nn.utils.spectral_norm as spectral_norm
 from models.networks.normalization import SPADE
 
 
-# ResNet block that uses SPADE.
-# It differs from the ResNet block of pix2pixHD in that
-# it takes in the segmentation map as input, learns the skip connection if necessary,
-# and applies normalization first and then convolution.
-# This architecture seemed like a standard architecture for unconditional or
-# class-conditional GAN architecture using residual block.
-# The code was inspired from https://github.com/LMescheder/GAN_stability.
 class SPADEResnetBlock(nn.Module):
     def __init__(self, fin, fout, opt):
         super().__init__()
-        # Attributes
+        
         self.learned_shortcut = fin != fout
         fmiddle = min(fin, fout)
 
         self.opt = opt
-        # create conv layers
+        
         self.conv_0 = nn.Conv2d(fin, fmiddle, kernel_size=3, padding=1)
         self.conv_1 = nn.Conv2d(fmiddle, fout, kernel_size=3, padding=1)
         if self.learned_shortcut:
             self.conv_s = nn.Conv2d(fin, fout, kernel_size=1, bias=False)
 
-        # apply spectral norm if specified
+        
         if "spectral" in opt.norm_G:
             self.conv_0 = spectral_norm(self.conv_0)
             self.conv_1 = spectral_norm(self.conv_1)
             if self.learned_shortcut:
                 self.conv_s = spectral_norm(self.conv_s)
 
-        # define normalization layers
+        
         spade_config_str = opt.norm_G.replace("spectral", "")
         self.norm_0 = SPADE(spade_config_str, fin, opt.semantic_nc, opt)
         self.norm_1 = SPADE(spade_config_str, fmiddle, opt.semantic_nc, opt)
         if self.learned_shortcut:
             self.norm_s = SPADE(spade_config_str, fin, opt.semantic_nc, opt)
 
-    # note the resnet block with SPADE also takes in |seg|,
-    # the semantic segmentation map as input
+    
     def forward(self, x, seg, degraded_image):
         x_s = self.shortcut(x, seg, degraded_image)
 
@@ -67,8 +58,7 @@ class SPADEResnetBlock(nn.Module):
         return F.leaky_relu(x, 2e-1)
 
 
-# ResNet block used in pix2pixHD
-# We keep the same architecture as pix2pixHD.
+
 class ResnetBlock(nn.Module):
     def __init__(self, dim, norm_layer, activation=nn.ReLU(False), kernel_size=3):
         super().__init__()
@@ -88,7 +78,7 @@ class ResnetBlock(nn.Module):
         return out
 
 
-# VGG architecter, used for the perceptual loss using a pretrained VGG network
+
 class VGG19(torch.nn.Module):
     def __init__(self, requires_grad=False):
         super().__init__()
@@ -125,33 +115,32 @@ class VGG19(torch.nn.Module):
 class SPADEResnetBlock_non_spade(nn.Module):
     def __init__(self, fin, fout, opt):
         super().__init__()
-        # Attributes
+        
         self.learned_shortcut = fin != fout
         fmiddle = min(fin, fout)
 
         self.opt = opt
-        # create conv layers
+        
         self.conv_0 = nn.Conv2d(fin, fmiddle, kernel_size=3, padding=1)
         self.conv_1 = nn.Conv2d(fmiddle, fout, kernel_size=3, padding=1)
         if self.learned_shortcut:
             self.conv_s = nn.Conv2d(fin, fout, kernel_size=1, bias=False)
 
-        # apply spectral norm if specified
+        
         if "spectral" in opt.norm_G:
             self.conv_0 = spectral_norm(self.conv_0)
             self.conv_1 = spectral_norm(self.conv_1)
             if self.learned_shortcut:
                 self.conv_s = spectral_norm(self.conv_s)
 
-        # define normalization layers
+       
         spade_config_str = opt.norm_G.replace("spectral", "")
         self.norm_0 = SPADE(spade_config_str, fin, opt.semantic_nc, opt)
         self.norm_1 = SPADE(spade_config_str, fmiddle, opt.semantic_nc, opt)
         if self.learned_shortcut:
             self.norm_s = SPADE(spade_config_str, fin, opt.semantic_nc, opt)
 
-    # note the resnet block with SPADE also takes in |seg|,
-    # the semantic segmentation map as input
+    
     def forward(self, x, seg, degraded_image):
         x_s = self.shortcut(x, seg, degraded_image)
 
