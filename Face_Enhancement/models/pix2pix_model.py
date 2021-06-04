@@ -103,7 +103,7 @@ class Pix2PixModel(torch.nn.Module):
             data["degraded_image"] = data["degraded_image"].cuda()
             data["image"] = data["image"].cuda()
 
-        )
+        
 
         return data["label"], data["image"], data["degraded_image"]
 
