@@ -17,18 +17,18 @@ def run_cmd(command):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_folder", type=str, default="./test_images/old", help="Test images")
+    parser.add_argument("--input_folder", type=str, default="/content/photo_restoration/test_images/upload", help="Test images")
     parser.add_argument(
         "--output_folder",
         type=str,
-        default="./output",
+        default="/content/photo_restoration/upload_output",
         help="Restored images, please use the absolute path",
     )
-    parser.add_argument("--GPU", type=str, default="6,7", help="0,1,2")
+    parser.add_argument("--GPU", type=str, default="0", help="0,1,2")
     parser.add_argument(
         "--checkpoint_name", type=str, default="Setting_9_epoch_100", help="choose which checkpoint"
     )
-    parser.add_argument("--with_scratch", action="store_true")
+    parser.add_argument("--with_scratch",default="1",action="store_true")
     opts = parser.parse_args()
 
     gpu1 = opts.GPU
@@ -158,6 +158,9 @@ if __name__ == "__main__":
     run_cmd(stage_4_command)
     print("Finish Stage 4 ...")
     print("\n")
+    import os
+
+    exec(open('/content/photo_restoration/demo_release.py').read())
 
     print("All the processing is done. Please check the results.")
 
