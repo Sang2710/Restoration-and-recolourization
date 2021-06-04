@@ -1,5 +1,4 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 from data.base_dataset import BaseDataset, get_params, get_transform
 from PIL import Image
@@ -16,8 +15,7 @@ class FaceTestDataset(BaseDataset):
             action="store_true",
             help="If specified, skip sanity check of correct label-image file pairing",
         )
-        #    parser.set_defaults(contain_dontcare_label=False)
-        #    parser.set_defaults(no_instance=True)
+        
         return parser
 
     def initialize(self, opt):
@@ -28,10 +26,10 @@ class FaceTestDataset(BaseDataset):
 
         image_list = os.listdir(image_path)
         image_list = sorted(image_list)
-        # image_list=image_list[:opt.max_dataset_size]
+        
 
-        self.label_paths = label_path  ## Just the root dir
-        self.image_paths = image_list  ## All the image name
+        self.label_paths = label_path  
+        self.image_paths = image_list  
 
         self.parts = [
             "skin",
