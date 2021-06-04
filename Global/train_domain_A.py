@@ -1,5 +1,3 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
 
 import time
 from collections import OrderedDict
@@ -70,11 +68,11 @@ for epoch in range(start_epoch, opt.niter + opt.niter_decay + 1):
         losses, generated = model(Variable(data['label']), Variable(data['inst']),
                                   Variable(data['image']), Variable(data['feat']), infer=save_fake)
 
-        # sum per device losses
+        
         losses = [torch.mean(x) if not isinstance(x, int) else x for x in losses]
         loss_dict = dict(zip(model.module.loss_names, losses))
 
-        # calculate final loss scalar
+       
         loss_D = (loss_dict['D_fake'] + loss_dict['D_real']) * 0.5
         loss_featD=(loss_dict['featD_fake'] + loss_dict['featD_real']) * 0.5
         loss_G = loss_dict['G_GAN'] + loss_dict.get('G_GAN_Feat', 0) + loss_dict.get('G_VGG', 0) + loss_dict['G_KL'] + loss_dict['G_featD']
