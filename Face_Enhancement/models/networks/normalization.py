@@ -1,5 +1,4 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 import re
 import torch
@@ -10,13 +9,13 @@ import torch.nn.utils.spectral_norm as spectral_norm
 
 
 def get_nonspade_norm_layer(opt, norm_type="instance"):
-    # helper function to get # output channels of the previous layer
+   
     def get_out_channel(layer):
         if hasattr(layer, "out_channels"):
             return getattr(layer, "out_channels")
         return layer.weight.size(0)
 
-    # this function will be returned
+   
     def add_norm_layer(layer):
         nonlocal norm_type
         if norm_type.startswith("spectral"):
@@ -26,8 +25,7 @@ def get_nonspade_norm_layer(opt, norm_type="instance"):
         if subnorm_type == "none" or len(subnorm_type) == 0:
             return layer
 
-        # remove bias in the previous layer, which is meaningless
-        # since it has no effect after normalization
+      
         if getattr(layer, "bias", None) is not None:
             delattr(layer, "bias")
             layer.register_parameter("bias", None)
@@ -80,10 +78,10 @@ class SPADE(nn.Module):
 
     def forward(self, x, segmap, degraded_image):
 
-        # Part 1. generate parameter-free normalized activations
+        
         normalized = self.param_free_norm(x)
 
-        # Part 2. produce scaling and bias conditioned on semantic map
+        
         segmap = F.interpolate(segmap, size=x.size()[2:], mode="nearest")
         degraded_face = F.interpolate(degraded_image, size=x.size()[2:], mode="bilinear")
 
@@ -94,7 +92,7 @@ class SPADE(nn.Module):
         gamma = self.mlp_gamma(actv)
         beta = self.mlp_beta(actv)
 
-        # apply scale and bias
+       
         out = normalized * (1 + gamma) + beta
 
         return out
