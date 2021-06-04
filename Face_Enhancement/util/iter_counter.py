@@ -1,12 +1,10 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 import os
 import time
 import numpy as np
 
 
-# Helper class that keeps track of training iterations
 class IterationCounter:
     def __init__(self, opt, dataset_size):
         self.opt = opt
@@ -14,7 +12,7 @@ class IterationCounter:
 
         self.first_epoch = 1
         self.total_epochs = opt.niter + opt.niter_decay
-        self.epoch_iter = 0  # iter number within each epoch
+        self.epoch_iter = 0  
         self.iter_record_path = os.path.join(self.opt.checkpoints_dir, self.opt.name, "iter.txt")
         if opt.isTrain and opt.continue_train:
             try:
@@ -29,7 +27,7 @@ class IterationCounter:
 
         self.total_steps_so_far = (self.first_epoch - 1) * dataset_size + self.epoch_iter
 
-    # return the iterator of epochs for the training
+    
     def training_epochs(self):
         return range(self.first_epoch, self.total_epochs + 1)
 
@@ -42,8 +40,6 @@ class IterationCounter:
     def record_one_iteration(self):
         current_time = time.time()
 
-        # the last remaining batch is dropped (see data/__init__.py),
-        # so we can assume batch size is always opt.batchSize
         self.time_per_iter = (current_time - self.last_iter_time) / self.opt.batchSize
         self.last_iter_time = current_time
         self.total_steps_so_far += self.opt.batchSize
