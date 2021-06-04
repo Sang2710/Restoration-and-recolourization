@@ -1,5 +1,4 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
+
 
 import torch.nn as nn
 import numpy as np
@@ -9,7 +8,7 @@ from models.networks.normalization import get_nonspade_norm_layer
 
 
 class ConvEncoder(BaseNetwork):
-    """ Same architecture as the image discriminator """
+    
 
     def __init__(self, opt):
         super().__init__()
