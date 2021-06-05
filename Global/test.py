@@ -128,7 +128,7 @@ if __name__ == "__main__":
             continue
         input = Image.open(input_file).convert("RGB")
 
-        print("Now you are processing %s" % (input_name))
+        #print("Now you are processing %s" % (input_name))
 
         if opt.NL_use_mask:
             mask_name = mask_loader[i]
@@ -156,7 +156,7 @@ if __name__ == "__main__":
         try:
             generated = model.inference(input, mask)
         except Exception as ex:
-            print("Skip %s due to an error:\n%s" % (input_name, str(ex)))
+            #print("Skip %s due to an error:\n%s" % (input_name, str(ex)))
             continue
 
         if input_name.endswith(".jpg"):
