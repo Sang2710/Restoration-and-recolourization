@@ -159,7 +159,7 @@ if __name__ == "__main__":
         done = time.time()
 
         if len(faces) == 0:
-            print("Warning: There is no face in %s" % (x))
+            #print("Warning: There is no face in %s" % (x))
             continue
 
         print(len(faces))
