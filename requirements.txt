@@ -1,3 +1,4 @@
+PySimpleGUI
 torch
 torchvision
 dlib
@@ -15,4 +16,4 @@ numpy
 matplotlib
 argparse
 PIL
-PySimpleGUI
+
