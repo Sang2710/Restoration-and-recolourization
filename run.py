@@ -156,9 +156,9 @@ if __name__ == "__main__":
     run_cmd(stage_4_command)
     
     
-    #import os
+    import os
 
-    #exec(open('/content/photo_restoration/demo_release.py').read())
+    exec(open('/content/photo_restoration/demo_release.py').read())
 
     print("  Finished")
 
